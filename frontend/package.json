@@ -1,0 +1,31 @@
+{
+  "name": "medical-drone-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-Powered Medical Drone Delivery Management — React frontend",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx"
+  },
+  "dependencies": {
+    "@react-leaflet/core": "^2.1.0",
+    "axios": "^1.7.9",
+    "framer-motion": "^14.1.0",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^1.54.0",
+    "maplibre-gl": "^6.13.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.28.0",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.17.0",
+    "vite": "^6.0.5"
+  }
+}
