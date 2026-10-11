@@ -1,6 +1,11 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict, NoDecode
-from pydantic import AnyUrl, field_validator
+from pathlib import Path
 from typing import Annotated, List
+from pydantic import AnyUrl, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict, NoDecode
+
+# Always resolve backend/.env relative to this config file
+_BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
+_ENV_FILE = _BACKEND_DIR / ".env"
 
 
 class Settings(BaseSettings):
@@ -10,7 +15,7 @@ class Settings(BaseSettings):
     """
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(_ENV_FILE),
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
@@ -28,12 +33,19 @@ class Settings(BaseSettings):
     # ── Weather API ──────────────────────────────────────────────────────────
     WEATHER_API_KEY: str = ""
     WEATHER_API_BASE_URL: str = "https://api.weatherapi.com/v1"
+    WEATHER_FORCE_CONDITION: str = ""  # Dev-only: SAFE, CAUTION, or UNSAFE
 
     # ── Map provider ─────────────────────────────────────────────────────────
     MAP_PROVIDER_KEY: str = ""
 
     # ── ML model ─────────────────────────────────────────────────────────────
     MODEL_PATH: str = "models/"
+
+    # ── LLM Explanation Service ──────────────────────────────────────────────
+    LLM_PROVIDER: str = "groq"
+    LLM_API_KEY: str = ""
+    LLM_MODEL: str = "openai/gpt-oss-120b"
+    LLM_TIMEOUT_SECONDS: float = 5.0
 
     # ── Phase 7: Priority Agent ───────────────────────────────────────────────
     # Number of minutes a request must wait before its priority tier escalates

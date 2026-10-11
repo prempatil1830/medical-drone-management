@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AeroMedical – Operator console</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Manrope:wght@500;600;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+@keyframes flow{to{stroke-dashoffset:-48}}
+@keyframes ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(2.6);opacity:0}}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.4)}}
+.flow{animation:flow 1.4s linear infinite}
+.ring{animation:ring 2.2s ease-out infinite;transform-box:fill-box;transform-origin:center}
+.beat{animation:beat 1.6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.flow,.ring,.beat{animation:none}}
+@media (max-width:760px){.sheet{top:auto !important;left:12px !important;right:12px !important;bottom:12px !important;width:auto !important}.hud{display:none !important}}
+button{cursor:pointer}
+@media (max-width:1100px){.trail{display:none !important}}
+button:focus-visible{outline:3px solid #0B1F33;outline-offset:2px}
+</style>
+</helmet>
+<div style="position:relative;width:100%;height:900px;overflow:hidden;background:#E6ECEE;font-family:'Manrope',sans-serif;color:#0B1F33">
+
+<svg aria-hidden="true" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+<rect width="1440" height="900" fill="#E6ECEE"/>
+<g fill="#F3F6F7">
+<rect x="470" y="90" width="150" height="90" rx="8"/><rect x="650" y="110" width="210" height="70" rx="8"/><rect x="900" y="60" width="120" height="110" rx="8"/>
+<rect x="470" y="300" width="120" height="110" rx="8"/><rect x="1120" y="250" width="170" height="100" rx="8"/><rect x="800" y="720" width="170" height="100" rx="8"/><rect x="1010" y="640" width="110" height="80" rx="8"/><rect x="1300" y="470" width="110" height="130" rx="8"/>
+</g>
+<path d="M1060 900C1120 760 1260 740 1440 770L1440 900Z" fill="#BBDDEB"/>
+<ellipse cx="1260" cy="150" rx="140" ry="58" fill="#BBDDEB"/>
+<ellipse cx="610" cy="640" rx="130" ry="92" fill="#CFE6D2"/>
+<path d="M930 520C990 480 1060 520 1040 580C1020 630 940 630 920 580Z" fill="#D8EBD6"/>
+<rect x="1170" y="400" width="110" height="64" rx="30" fill="#D8EBD6"/>
+<g fill="none" stroke-linecap="round">
+<g stroke="#D3DCE0" stroke-width="16"><path d="M400 760C640 700 900 520 1440 480"/><path d="M520 0C560 220 640 520 700 900"/><path d="M900 0C940 260 1040 420 1100 900"/><path d="M400 420C700 440 1000 380 1440 330"/></g>
+<g stroke="#FFFFFF" stroke-width="11"><path d="M400 760C640 700 900 520 1440 480"/><path d="M520 0C560 220 640 520 700 900"/><path d="M900 0C940 260 1040 420 1100 900"/><path d="M400 420C700 440 1000 380 1440 330"/></g>
+<g stroke="#FFFFFF" stroke-width="5"><path d="M470 200L1440 240"/><path d="M450 560L1440 640"/><path d="M1220 0L1180 900"/><path d="M780 0L840 900"/></g>
+</g>
+<g fill="none" stroke-linecap="round">
+<path d="M620 610Q704 442 856 364" stroke="#FFFFFF" stroke-width="12"/>
+<path d="M620 610Q704 442 856 364" style="stroke:{{accent}}" stroke-width="6"/>
+<path d="M856 364Q958 312 1090 300" stroke="#FFFFFF" stroke-width="11" opacity=".9"/>
+<path class="flow" d="M856 364Q958 312 1090 300" style="stroke:{{accent}}" stroke-width="5" stroke-dasharray="10 14"/>
+</g>
+<circle cx="620" cy="610" r="16" fill="#FFFFFF" stroke="#0B1F33" stroke-width="3"/>
+<path d="M620 603V617M613 610H627" stroke="#0B1F33" stroke-width="3" stroke-linecap="round"/>
+<circle cx="1090" cy="300" r="26" fill="#0B1F33" opacity=".12"/>
+<circle cx="1090" cy="300" r="14" fill="#0B1F33"/><circle cx="1090" cy="300" r="5" fill="#FFFFFF"/>
+<g font-family="Manrope" font-weight="800" font-size="14" text-anchor="middle" stroke="#FFFFFF" stroke-width="5" paint-order="stroke" fill="#0B1F33">
+<text x="620" y="652">Pickup · Lalbagh Clinic</text><text x="1090" y="268">Drop · Patil Clinic</text>
+</g>
+<g transform="translate(856 364)">
+<circle class="ring" r="20" style="fill:{{accent}}"/>
+<circle r="23" fill="#FFFFFF" style="stroke:{{accent}}" stroke-width="3"/>
+<g transform="rotate(-27)"><path d="M-11-11L11 11M-11 11L11-11" stroke="#0B1F33" stroke-width="2.5" stroke-linecap="round"/>
+<g fill="#0B1F33"><circle cx="-11" cy="-11" r="4"/><circle cx="11" cy="-11" r="4"/><circle cx="-11" cy="11" r="4"/><circle cx="11" cy="11" r="4"/></g>
+<circle r="4" style="fill:{{accent}}"/></g>
+</g>
+</svg>
+
+<div style="position:absolute;top:24px;left:24px;display:flex;align-items:center;gap:10px;height:48px;padding:0 18px 0 12px;background:#fff;border-radius:24px;box-shadow:0 8px 24px rgba(11,31,51,.12)">
+<svg aria-hidden="true" width="28" height="28" viewBox="-14 -14 28 28"><path d="M-9-9L9 9M-9 9L9-9" stroke="#0B1F33" stroke-width="2.4" stroke-linecap="round"/><circle cx="-9" cy="-9" r="3.4" fill="#0B1F33"/><circle cx="9" cy="-9" r="3.4" fill="#0B1F33"/><circle cx="-9" cy="9" r="3.4" fill="#0B1F33"/><circle cx="9" cy="9" r="3.4" fill="#0B1F33"/><circle r="3.4" style="fill:{{accent}}"/></svg>
+<span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.02em">AeroMedical</span>
+</div>
+
+<div class="hud" style="position:absolute;top:24px;right:24px;display:flex;gap:10px;align-items:center">
+<span style="display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;background:#FFF1CC;color:#6B4600;border-radius:24px;font-weight:800;font-size:13px;letter-spacing:.06em;box-shadow:0 8px 24px rgba(11,31,51,.10)"><span style="width:9px;height:9px;border-radius:50%;background:#E59B00"></span>LIGHT RAIN · CAUTION</span>
+<span style="display:flex;align-items:center;gap:10px;height:48px;padding:0 16px 0 8px;background:#fff;border-radius:24px;font-weight:600;font-size:14px;box-shadow:0 8px 24px rgba(11,31,51,.12)"><span style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#0B1F33;color:#fff;font-size:12px;font-weight:800">OP</span>Operator · Control room</span>
+</div>
+
+<section class="sheet" aria-label="Dispatch queue" style="position:absolute;top:92px;left:24px;width:420px;box-sizing:border-box;padding:24px;background:#fff;border-radius:28px;box-shadow:0 24px 60px rgba(11,31,51,.16),0 2px 6px rgba(11,31,51,.06);display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:32px;letter-spacing:-.025em">Dispatch queue</h1><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">SORTED BY PRIORITY</span></div>
+<div style="display:flex;gap:8px"><button style="height:36px;padding:0 16px;border-radius:18px;background:#0B1F33;color:#fff;border:0;font-family:'Manrope',sans-serif;font-weight:800;font-size:13px">All 4</button><button style="height:36px;padding:0 16px;border-radius:18px;background:#fff;color:#0B1F33;border:2px solid #D5DEE2;font-family:'Manrope',sans-serif;font-weight:800;font-size:13px">Waiting 2</button><button style="height:36px;padding:0 16px;border-radius:18px;background:#fff;color:#0B1F33;border:2px solid #D5DEE2;font-family:'Manrope',sans-serif;font-weight:800;font-size:13px">Active 2</button></div>
+<article style="border:2px solid #0B1F33;border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="display:flex;align-items:center;gap:10px"><span style="padding:4px 10px;border-radius:10px;background:#D93A1F;color:#fff;font-weight:800;font-size:11px;letter-spacing:.06em">CRITICAL</span><span style="font-weight:800;font-size:17px">Blood</span></span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">waiting 6 min</span></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">2 units · 1.5 kg · Patil Clinic</div>
+<div style="display:flex;align-items:center;gap:10px"><span style="padding:4px 10px;border-radius:10px;background:#DDF3EF;color:#0A6B5E;font-weight:800;font-size:11px;letter-spacing:.06em">ASSIGNED</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">BLR-D004</span></div>
+</article><article style="border:2px solid #E3EAED;border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="display:flex;align-items:center;gap:10px"><span style="padding:4px 10px;border-radius:10px;background:#FFF1CC;color:#6B4600;font-weight:800;font-size:11px;letter-spacing:.06em">HIGH</span><span style="font-weight:800;font-size:17px">Insulin</span></span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">waiting 4 min</span></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">10 units · 0.8 kg · Apollo Hospital</div>
+<div style="display:flex;align-items:center;gap:10px"><button style="height:36px;padding:0 20px;border:0;border-radius:18px;background:{{accent}};color:#fff;font-family:'Manrope',sans-serif;font-weight:800;font-size:14px">Dispatch</button></div>
+</article><article style="border:2px solid #E3EAED;border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="display:flex;align-items:center;gap:10px"><span style="padding:4px 10px;border-radius:10px;background:#FFF1CC;color:#6B4600;font-weight:800;font-size:11px;letter-spacing:.06em">HIGH</span><span style="font-weight:800;font-size:17px">Plasma</span></span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">waiting 11 min</span></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">3 units · 2 kg · St. Johns</div>
+<div style="display:flex;align-items:center;gap:10px"><span style="padding:4px 10px;border-radius:10px;background:#DDF3EF;color:#0A6B5E;font-weight:800;font-size:11px;letter-spacing:.06em">IN TRANSIT</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">BLR-D002</span></div>
+</article><article style="border:2px solid #E3EAED;border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="display:flex;align-items:center;gap:10px"><span style="padding:4px 10px;border-radius:10px;background:#E3EAED;color:#4A5B6C;font-weight:800;font-size:11px;letter-spacing:.06em">NORMAL</span><span style="font-weight:800;font-size:17px">Vaccines</span></span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">waiting 2 min</span></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">50 units · 3 kg · Patil Clinic</div>
+<div style="display:flex;align-items:center;gap:10px"><button style="height:36px;padding:0 20px;border:0;border-radius:18px;background:{{accent}};color:#fff;font-family:'Manrope',sans-serif;font-weight:800;font-size:14px">Dispatch</button></div>
+</article>
+</section>
+<section class="trail" aria-label="Decision trail" style="position:absolute;top:92px;right:24px;width:380px;box-sizing:border-box;padding:24px;background:#fff;border-radius:28px;box-shadow:0 24px 60px rgba(11,31,51,.16),0 2px 6px rgba(11,31,51,.06);display:flex;flex-direction:column;gap:18px">
+<div><div style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C">REQUEST · BLOOD · CRITICAL</div><h2 style="margin:4px 0 0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.02em">Decision trail</h2></div>
+<ol style="list-style:none;margin:0;padding:0"><li style="display:flex;gap:14px;min-height:62px"><div style="display:flex;flex-direction:column;align-items:center"><span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#0B1F33"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 6.2L5 8.5L9.5 3.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span style="flex:1;width:2px;background:#0B1F33"></span></div><div style="padding-top:1px;display:flex;flex-direction:column;gap:3px"><span style="display:flex;align-items:center;gap:10px"><span style="font-weight:800;font-size:15px">Priority</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;padding:2px 8px;border-radius:8px;background:#EEF2F4">CRITICAL · 1.00</span></span><span style="font-size:13px;line-height:1.4;color:#4A5B6C">Blood with CRITICAL urgency.</span></div></li><li style="display:flex;gap:14px;min-height:62px"><div style="display:flex;flex-direction:column;align-items:center"><span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#0B1F33"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 6.2L5 8.5L9.5 3.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span style="flex:1;width:2px;background:#0B1F33"></span></div><div style="padding-top:1px;display:flex;flex-direction:column;gap:3px"><span style="display:flex;align-items:center;gap:10px"><span style="font-weight:800;font-size:15px">Weather</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;padding:2px 8px;border-radius:8px;background:#EEF2F4">SAFE · 99.9%</span></span><span style="font-size:13px;line-height:1.4;color:#4A5B6C">Light rain on the route, within limits.</span></div></li><li style="display:flex;gap:14px;min-height:62px"><div style="display:flex;flex-direction:column;align-items:center"><span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#0B1F33"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 6.2L5 8.5L9.5 3.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span style="flex:1;width:2px;background:#0B1F33"></span></div><div style="padding-top:1px;display:flex;flex-direction:column;gap:3px"><span style="display:flex;align-items:center;gap:10px"><span style="font-weight:800;font-size:15px">Allocation</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;padding:2px 8px;border-radius:8px;background:#EEF2F4">BLR-D004 · 0.87</span></span><span style="font-size:13px;line-height:1.4;color:#4A5B6C">Highest score of 5 feasible drones.</span></div></li><li style="display:flex;gap:14px;min-height:62px"><div style="display:flex;flex-direction:column;align-items:center"><span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#0B1F33"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 6.2L5 8.5L9.5 3.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span style="flex:1;width:2px;background:#0B1F33"></span></div><div style="padding-top:1px;display:flex;flex-direction:column;gap:3px"><span style="display:flex;align-items:center;gap:10px"><span style="font-weight:800;font-size:15px">Route</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;padding:2px 8px;border-radius:8px;background:#EEF2F4">7.01 km · 7.0 min</span></span><span style="font-size:13px;line-height:1.4;color:#4A5B6C">Battery needed 10.5% (includes approach leg).</span></div></li><li style="display:flex;gap:14px;min-height:44px"><div style="display:flex;flex-direction:column;align-items:center"><span style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#0B1F33"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 6.2L5 8.5L9.5 3.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div style="padding-top:1px;display:flex;flex-direction:column;gap:3px"><span style="display:flex;align-items:center;gap:10px"><span style="font-weight:800;font-size:15px">Safety</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;padding:2px 8px;border-radius:8px;background:#EEF2F4">PASS</span></span><span style="font-size:13px;line-height:1.4;color:#4A5B6C">Battery, range, payload and weather re-checked.</span></div></li></ol>
+<div style="background:#F1F5F6;border-radius:18px;padding:14px 16px"><div style="font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12px;color:#4A5B6C;font-size:11px;letter-spacing:.06em;margin-bottom:6px">SUMMARY · WRITTEN FROM THE DECISION TRAIL</div><div style="font-size:14px;line-height:1.5">A critical blood request. Weather is safe for the route. BLR-D004 was chosen for the highest allocation score, and every safety check passed.</div></div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#D93A1F"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+return { accent: this.props.accent ?? '#D93A1F' };
+}
+}
+</script>
+</body>
+</html>

@@ -106,8 +106,20 @@ class SimulationEngine:
                 {"$set": mission_update}
             )
 
-            # Update associated request status in MongoDB
-            req_update = {"status": status}
+            # Update associated request status in MongoDB (strictly RequestStatus enum values)
+            from app.schemas.medical_request import RequestStatus
+            if status in ("PACKAGE_COLLECTED", "IN_TRANSIT", "APPROACHING_DESTINATION"):
+                req_status = RequestStatus.in_transit.value
+            elif status == "DELIVERED":
+                req_status = RequestStatus.delivered.value
+            elif status == "FAILED":
+                req_status = RequestStatus.failed.value
+            elif status == "CANCELLED":
+                req_status = RequestStatus.cancelled.value
+            else:
+                req_status = RequestStatus.assigned.value
+
+            req_update = {"status": req_status}
             if failure_reason:
                 req_update["failure_reason"] = failure_reason
                 

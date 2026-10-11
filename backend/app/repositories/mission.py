@@ -80,6 +80,17 @@ class MissionRepository:
         cursor = self._col.find({}).sort("started_at", -1).limit(limit)
         return [_doc_to_dict(doc) async for doc in cursor]
 
+    async def update_weather_note(self, mission_id: str, note: str) -> bool:
+        """Update the weather note on a mission document."""
+        query = {}
+        try:
+            query = {"_id": ObjectId(mission_id)}
+        except Exception:
+            query = {"mission_id": mission_id}
+
+        result = await self._col.update_one(query, {"$set": {"weather.note": note}})
+        return result.matched_count > 0
+
     # ── Indexes ───────────────────────────────────────────────────────────────
 
     async def ensure_indexes(self) -> None:

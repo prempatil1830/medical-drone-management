@@ -31,6 +31,8 @@ htmlcov/
 node_modules/
 frontend/dist/
 frontend/.env.local
+frontend/screenshots/
+frontend/run_probes.cjs
 
 # macOS
 .DS_Store

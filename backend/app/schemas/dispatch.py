@@ -7,6 +7,7 @@ outputs of all three agents: Priority Agent, Weather Agent, Allocation Agent.
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel
@@ -83,3 +84,17 @@ class DispatchResponse(BaseModel):
     # ── Mission output (Phase 8) ──────────────────────────────────────────────
     mission_id: Optional[str] = None
     """ID of the created mission, or None if halted/rejected."""
+
+
+class AgentDecisionItem(BaseModel):
+    agent_name: str
+    decision: str
+    score: Optional[float] = None
+    reason: Optional[str] = None
+    timestamp: datetime
+
+
+class DispatchSummaryResponse(BaseModel):
+    text: str
+    source: str
+    generated_at: datetime

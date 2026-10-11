@@ -188,6 +188,32 @@ class WeatherAgent:
         observation_id = str(uuid.uuid4())
         now = datetime.now(UTC)
 
+        # ── Dev-only Demo Switch: WEATHER_FORCE_CONDITION ─────────────────────
+        from app.core.config import settings
+        force_cond = (settings.WEATHER_FORCE_CONDITION or "").strip().upper()
+        if force_cond in ("SAFE", "CAUTION", "UNSAFE"):
+            forced_reason = "Forced by WEATHER_FORCE_CONDITION (demo)"
+            prob = 1.0 if force_cond == "SAFE" else (0.75 if force_cond == "CAUTION" else 0.0)
+            log.warning("weather_agent_condition_forced", condition=force_cond, lat=lat, lng=lng)
+            await self._persist(
+                obs_repo=obs_repo,
+                observation_id=observation_id,
+                lat=lat,
+                lng=lng,
+                timestamp=now,
+                raw_snapshot={"demo_forced": True},
+                flight_condition=force_cond,
+                probability=prob,
+                reason=forced_reason,
+            )
+            return WeatherAgentResult(
+                flight_condition=force_cond,
+                probability=prob,
+                raw_weather_snapshot={"demo_forced": True},
+                observation_id=observation_id,
+                reason=forced_reason,
+            )
+
         # ── Step 1: Fetch from OWM ────────────────────────────────────────────
         api_result: WeatherAPIResult = await self._client.fetch(lat=lat, lng=lng)
 

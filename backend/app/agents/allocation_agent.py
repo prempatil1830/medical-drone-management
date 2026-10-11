@@ -153,6 +153,7 @@ class AllocationResult:
     filtered_count: int = 0          # Number of drones that passed pre-filter
     candidate_count: int = 0         # Total drones examined before filtering
     score_breakdown: dict = field(default_factory=dict)  # Sub-scores for winner
+    ranked_candidates: list[dict] = field(default_factory=list)  # Feasible candidates sorted by score descending
 
 
 # ── Agent ─────────────────────────────────────────────────────────────────────
@@ -330,6 +331,15 @@ class AllocationAgent:
             scored.append((s, drone, approach_km))
 
         scored.sort(key=lambda t: t[0], reverse=True)
+        ranked_candidates = [
+            {
+                "drone_id": d.get("drone_id", d.get("id", "?")),
+                "score": s,
+                "drone": d,
+                "approach_km": app_km,
+            }
+            for s, d, app_km in scored
+        ]
         best_score, best_drone, best_approach_km = scored[0]
         best_id = best_drone.get("drone_id", best_drone.get("id", "?"))
 
@@ -386,6 +396,7 @@ class AllocationAgent:
             filtered_count=len(feasible),
             candidate_count=len(drones),
             score_breakdown=score_breakdown,
+            ranked_candidates=ranked_candidates,
         )
 
     # ── Private helpers ───────────────────────────────────────────────────────
@@ -403,6 +414,7 @@ class AllocationAgent:
         filtered_count: int,
         candidate_count: int,
         score_breakdown: dict = {},
+        ranked_candidates: list[dict] = [],
     ) -> AllocationResult:
         """Persist the decision and return the result dataclass. Swallows storage errors."""
         try:
@@ -431,4 +443,5 @@ class AllocationAgent:
             filtered_count=filtered_count,
             candidate_count=candidate_count,
             score_breakdown=score_breakdown,
+            ranked_candidates=ranked_candidates,
         )

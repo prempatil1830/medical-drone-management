@@ -24,6 +24,8 @@ from pathlib import Path
 backend_dir = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(backend_dir))
 
+from bson import ObjectId
+from app.core.config import settings
 from app.core.security import hash_password
 from app.db.database import close_db, connect_db, get_database
 from app.repositories.user import UserRepository
@@ -51,8 +53,9 @@ async def seed_user(
 
         if existing:
             # Update role and password
+            user_oid = existing.get("_id") or ObjectId(existing["id"])
             await repo._col.update_one(
-                {"_id": existing["_id"]},
+                {"_id": user_oid},
                 {"$set": {"name": name, "role": role, "password_hash": pwd_hash, "center_id": center_id}},
             )
             print(f"Updated existing user '{email}' with role '{role}'.")
@@ -73,6 +76,7 @@ async def seed_user(
 
 
 def main():
+    print(f"Using database: {settings.MONGODB_DATABASE}")
     parser = argparse.ArgumentParser(description="Seed operator or admin users into MongoDB.")
     parser.add_argument(
         "--email",

@@ -69,6 +69,23 @@ class DroneRepository:
             return True
         return False
 
+    async def assign_drone(self, drone_id: str) -> Optional[dict]:
+        """
+        Atomically transition a drone from AVAILABLE to ASSIGNED status.
+        Uses find_one_and_update with {"drone_id": drone_id, "status": "AVAILABLE"}.
+        Returns the updated document if assignment succeeded, or None if the drone
+        was already assigned or no longer AVAILABLE.
+        """
+        doc = await self._col.find_one_and_update(
+            {"drone_id": drone_id, "status": "AVAILABLE"},
+            {"$set": {"status": "ASSIGNED"}},
+            return_document=True,
+        )
+        if doc:
+            log.info("drone_assigned_atomically", drone_id=drone_id)
+            return _doc_to_dict(doc)
+        return None
+
     async def release_drone(
         self,
         drone_id: str,

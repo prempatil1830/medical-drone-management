@@ -7,10 +7,11 @@ const getInitialState = () => {
     return {
       token: token || null,
       user: userJson ? JSON.parse(userJson) : null,
+      flashMessage: null,
     }
   } catch (error) {
     console.error('Error reading localStorage initial state:', error)
-    return { token: null, user: null }
+    return { token: null, user: null, flashMessage: null }
   }
 }
 
@@ -24,7 +25,7 @@ export const useAuthStore = create((set) => ({
     } catch (e) {
       console.error('Failed to sync auth to localStorage:', e)
     }
-    set({ token, user })
+    set({ token, user, flashMessage: null })
   },
   
   logout: () => {
@@ -34,6 +35,9 @@ export const useAuthStore = create((set) => ({
     } catch (e) {
       console.error('Failed to remove auth from localStorage:', e)
     }
-    set({ token: null, user: null })
-  }
+    set({ token: null, user: null, flashMessage: null })
+  },
+
+  setFlashMessage: (flashMessage) => set({ flashMessage }),
+  clearFlashMessage: () => set({ flashMessage: null }),
 }))

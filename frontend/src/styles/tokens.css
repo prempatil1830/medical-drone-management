@@ -1,4 +1,103 @@
 /* ══════════════════════════════════════════════════════════════════════
+   AeroMedical Map Markers
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════════════
+   AeroMedical Map Markers
+   ══════════════════════════════════════════════════════════════════════ */
+.map-marker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 5;
+}
+
+.map-pin {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.map-pin--pickup {
+  background-color: #fff;
+  border: 3px solid var(--ink);
+  box-shadow: inset 0 0 0 2px #fff;
+  /* cross inside */
+  background-image: linear-gradient(var(--ink), var(--ink)), linear-gradient(var(--ink), var(--ink));
+  background-position: center;
+  background-size: 8px 2px, 2px 8px;
+  background-repeat: no-repeat;
+  width: 18px;
+  height: 18px;
+}
+
+.map-pin--dest {
+  background-color: var(--ink);
+  border: none;
+  box-shadow: 0 0 0 6px rgba(11, 31, 51, 0.15);
+}
+
+.map-pin--hub {
+  background-color: #0E8F7E;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 4px rgba(14, 143, 126, 0.35);
+  width: 18px;
+  height: 18px;
+}
+
+.map-pin--dashed {
+  background-color: transparent;
+  border: 2px dashed var(--text-secondary);
+  box-shadow: none;
+}
+
+.drone-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+}
+
+.drone-marker::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-color);
+  animation: pulse-ring 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  opacity: 0.5;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.6); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.map-pin-label {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(11,31,51,0.1);
+  border: 1px solid rgba(11,31,51,0.05);
+  pointer-events: none;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════
    AeroMedical Light Theme Tokens — Flat, High Contrast
    ══════════════════════════════════════════════════════════════════════ */
 :root {
@@ -91,4 +190,24 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.maplibregl-ctrl-attrib {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 12px;
+  padding: 4px 10px !important;
+  font-family: var(--font-sans) !important;
+  font-size: 11px !important;
+  color: var(--ink) !important;
+  margin: 10px !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.maplibregl-ctrl-attrib a {
+  color: var(--ink) !important;
+  font-weight: 600;
+  text-decoration: none;
+}
+.maplibregl-ctrl-attrib a:hover {
+  text-decoration: underline;
 }

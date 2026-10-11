@@ -35,7 +35,10 @@ COLLECTION = "agent_decisions"
 
 
 def _doc_to_dict(doc: dict) -> dict:
-    doc["id"] = str(doc.pop("_id"))
+    if not doc:
+        return {}
+    doc = dict(doc)
+    doc["id"] = str(doc.pop("_id", ""))
     return doc
 
 
@@ -54,8 +57,9 @@ class AgentDecisionRepository:
             agent_name=data.get("agent_name"),
             decision=data.get("decision"),
         )
-        doc = await self._col.find_one({"_id": result.inserted_id})
-        return _doc_to_dict(doc)
+        inserted_id = getattr(result, "inserted_id", None)
+        doc = await self._col.find_one({"_id": inserted_id}) if inserted_id else None
+        return _doc_to_dict(doc) if doc else data
 
     # ── Read ──────────────────────────────────────────────────────────────────
 
@@ -66,7 +70,8 @@ class AgentDecisionRepository:
     async def list_by_request(self, request_id: str) -> list[dict]:
         """Return all agent decisions for a given request, oldest first."""
         cursor = self._col.find({"request_id": request_id}).sort("timestamp", 1)
-        return [_doc_to_dict(doc) async for doc in cursor]
+        res = [_doc_to_dict(doc) async for doc in cursor]
+        return res
 
     async def list_recent(self, limit: int = 100) -> list[dict]:
         """Return most-recent decisions, newest first."""

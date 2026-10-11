@@ -1,66 +1,136 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth';
-import { Button } from './ui/Button';
 import { Plane, LogOut } from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 
+  if (!user) return null;
+
+  const role = user.role || 'hospital';
+  const isHospital = role === 'hospital' || role === 'hospital_admin';
+  const isOperator = role === 'operator';
+  const isAdmin = role === 'admin' || role === 'system_admin';
+
+  const roleHome = isHospital ? '/' : '/operator';
+
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  if (!user) return null;
-
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <NavLink to="/" className="navbar-brand" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Plane size={24} color="var(--accent-color)" strokeWidth={2} />
+    <header className="top-navbar">
+      <div className="navbar-inner">
+        {/* Brand */}
+        <NavLink to={roleHome} className="brand-link" id="brand-link">
+          <div className="brand-icon">
+            <Plane size={20} strokeWidth={2.5} />
+          </div>
           <span>AeroMedical</span>
         </NavLink>
-        
-        <div className="navbar-links">
-          <NavLink 
-            to="/" 
-            end
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            Dashboard
-          </NavLink>
-          <NavLink 
-            to="/requests" 
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            Submit Request
-          </NavLink>
-          <NavLink 
-            to="/request-queue" 
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            Request Queue
-          </NavLink>
-          <NavLink 
-            to="/fleet" 
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            Fleet Dashboard
-          </NavLink>
 
-          <div className="flex items-center gap-4" style={{ marginLeft: '1rem' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              {user.email}
-            </span>
-            <Button variant="secondary" onClick={handleLogout} style={{ padding: '4px 12px', minHeight: '32px', minWidth: '32px' }}>
-              <LogOut size={16} />
-              Logout
-            </Button>
+        {/* Navigation Links for Role Only */}
+        <nav className="nav-links-group" id="nav-links-group">
+          {isHospital && (
+            <>
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
+                id="nav-dashboard"
+              >
+                Dashboard
+              </NavLink>
+              <NavLink
+                to="/requests/new"
+                className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
+                id="nav-new-request"
+              >
+                New Request
+              </NavLink>
+              <NavLink
+                to="/requests"
+                className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
+                id="nav-my-requests"
+              >
+                My Requests
+              </NavLink>
+              <NavLink
+                to="/fleet"
+                className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
+                id="nav-fleet"
+              >
+                Fleet
+              </NavLink>
+            </>
+          )}
+
+          {isOperator && (
+            <>
+              <NavLink
+                to="/operator"
+                className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
+                id="nav-operator"
+              >
+                Dispatch Console
+              </NavLink>
+              <NavLink
+                to="/fleet"
+                className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
+                id="nav-fleet"
+              >
+                Fleet
+              </NavLink>
+            </>
+          )}
+
+          {isAdmin && (
+            <>
+              <NavLink
+                to="/operator"
+                className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
+                id="nav-operator"
+              >
+                Dispatch Console
+              </NavLink>
+              <NavLink
+                to="/fleet"
+                className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
+                id="nav-fleet"
+              >
+                Fleet
+              </NavLink>
+              <NavLink
+                to="/admin"
+                className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
+                id="nav-admin"
+              >
+                Analytics
+              </NavLink>
+            </>
+          )}
+        </nav>
+
+        {/* User Info & Logout */}
+        <div className="nav-user-controls">
+          <div className="user-badge" id="user-badge">
+            <span className="user-email" title={user.email}>{user.email}</span>
+            <span className="user-role-pill">{user.role}</span>
           </div>
+          <button
+            className="btn-logout"
+            onClick={handleLogout}
+            id="logout-btn"
+            title="Log out and clear session"
+          >
+            <LogOut size={14} />
+            <span>Logout</span>
+          </button>
         </div>
       </div>
-    </nav>
+    </header>
   );
 }

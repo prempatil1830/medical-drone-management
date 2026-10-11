@@ -21,16 +21,13 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-# Allow running as a standalone script from repo root
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+# Allow running as a standalone script from repo root or backend directory
+backend_dir = Path(__file__).resolve().parent.parent
+if str(backend_dir) not in sys.path:
+    sys.path.insert(0, str(backend_dir))
 
 import motor.motor_asyncio
-from dotenv import load_dotenv
-
-load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env")
-
-MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
-MONGODB_DATABASE = os.getenv("MONGODB_DATABASE", "medical_drone_db")
+from app.core.config import settings
 
 # ── Drone fleet definition ────────────────────────────────────────────────────
 # Coordinates scattered across Bengaluru: lat 12.90–13.05, lng 77.55–77.70
@@ -38,121 +35,122 @@ MONGODB_DATABASE = os.getenv("MONGODB_DATABASE", "medical_drone_db")
 
 DRONES = [
     {
-        "drone_id": "BLR-D001",
-        "model": "MediHawk X200",
+        "drone_id": "DRN-001",
+        "model": "Zipline P2 Zip",
         "battery_pct": 98.0,
-        "max_payload_kg": 5.0,
-        "max_range_km": 25.0,
-        "latitude": 12.9716,
-        "longitude": 77.5946,
-        "status": "AVAILABLE",
-        "zone": "Central Bengaluru",
-    },
-    {
-        "drone_id": "BLR-D002",
-        "model": "MediHawk X200",
-        "battery_pct": 85.5,
-        "max_payload_kg": 5.0,
-        "max_range_km": 25.0,
+        "max_payload_kg": 1.75,
+        "max_range_km": 40.0,
         "latitude": 13.0358,
         "longitude": 77.5970,
         "status": "AVAILABLE",
-        "zone": "Yelahanka",
+        "zone": "North Bengaluru",
     },
     {
-        "drone_id": "BLR-D003",
-        "model": "CargoSky Pro",
-        "battery_pct": 72.0,
-        "max_payload_kg": 10.0,
+        "drone_id": "DRN-002",
+        "model": "Zipline P2 Zip",
+        "battery_pct": 85.5,
+        "max_payload_kg": 1.75,
         "max_range_km": 40.0,
-        "latitude": 12.9352,
-        "longitude": 77.6245,
+        "latitude": 13.0210,
+        "longitude": 77.6150,
         "status": "AVAILABLE",
-        "zone": "Koramangala",
+        "zone": "North Bengaluru",
     },
     {
-        "drone_id": "BLR-D004",
-        "model": "CargoSky Pro",
+        "drone_id": "DRN-003",
+        "model": "Wingcopter 198",
+        "battery_pct": 78.5,
+        "max_payload_kg": 6.0,
+        "max_range_km": 75.0,
+        "latitude": 12.9102,
+        "longitude": 77.5680,
+        "status": "AVAILABLE",
+        "zone": "South Bengaluru",
+    },
+    {
+        "drone_id": "DRN-004",
+        "model": "Wingcopter 198",
         "battery_pct": 91.0,
-        "max_payload_kg": 10.0,
-        "max_range_km": 40.0,
-        "latitude": 12.9279,
-        "longitude": 77.6271,
+        "max_payload_kg": 6.0,
+        "max_range_km": 75.0,
+        "latitude": 12.9250,
+        "longitude": 77.5820,
         "status": "AVAILABLE",
-        "zone": "BTM Layout",
+        "zone": "South Bengaluru",
     },
     {
-        "drone_id": "BLR-D005",
-        "model": "SwiftMed 100",
-        "battery_pct": 64.0,
+        "drone_id": "DRN-005",
+        "model": "Skydio X10",
+        "battery_pct": 88.0,
         "max_payload_kg": 2.5,
-        "max_range_km": 15.0,
-        "latitude": 13.0012,
-        "longitude": 77.5553,
+        "max_range_km": 25.0,
+        "latitude": 12.9800,
+        "longitude": 77.6000,
         "status": "AVAILABLE",
-        "zone": "Rajajinagar",
+        "zone": "East Bengaluru",
     },
     {
-        "drone_id": "BLR-D006",
-        "model": "SwiftMed 100",
+        "drone_id": "DRN-006",
+        "model": "Skydio X10",
         "battery_pct": 55.0,
         "max_payload_kg": 2.5,
-        "max_range_km": 15.0,
-        "latitude": 12.9592,
-        "longitude": 77.6974,
+        "max_range_km": 25.0,
+        "latitude": 12.9650,
+        "longitude": 77.7000,
         "status": "AVAILABLE",
-        "zone": "Whitefield",
+        "zone": "East Bengaluru",
     },
     {
-        "drone_id": "BLR-D007",
-        "model": "MediHawk X300",
+        "drone_id": "DRN-007",
+        "model": "DJI Matrice 350 RTK",
         "battery_pct": 88.0,
-        "max_payload_kg": 8.0,
-        "max_range_km": 35.0,
-        "latitude": 13.0475,
-        "longitude": 77.6160,
+        "max_payload_kg": 2.7,
+        "max_range_km": 20.0,
+        "latitude": 12.9720,
+        "longitude": 77.5560,
         "status": "AVAILABLE",
-        "zone": "Hebbal",
+        "zone": "West Bengaluru",
     },
     {
-        "drone_id": "BLR-D008",
-        "model": "MediHawk X300",
+        "drone_id": "DRN-008",
+        "model": "DJI Matrice 350 RTK",
         "battery_pct": 77.0,
-        "max_payload_kg": 8.0,
-        "max_range_km": 35.0,
-        "latitude": 12.9255,
-        "longitude": 77.5638,
+        "max_payload_kg": 2.7,
+        "max_range_km": 20.0,
+        "latitude": 12.9880,
+        "longitude": 77.5600,
         "status": "AVAILABLE",
-        "zone": "Jayanagar",
+        "zone": "West Bengaluru",
     },
     {
-        "drone_id": "BLR-D009",
-        "model": "CargoSky Pro",
+        "drone_id": "DRN-009",
+        "model": "Volansi VOLY C20",
         "battery_pct": 22.0,
-        "max_payload_kg": 10.0,
-        "max_range_km": 40.0,
-        "latitude": 12.9698,
-        "longitude": 77.7499,
+        "max_payload_kg": 9.0,
+        "max_range_km": 80.0,
+        "latitude": 12.9800,
+        "longitude": 77.6100,
         "status": "CHARGING",
-        "zone": "Electronic City",
+        "zone": "Central Bengaluru",
     },
     {
-        "drone_id": "BLR-D010",
-        "model": "SwiftMed 100",
-        "battery_pct": 0.0,
-        "max_payload_kg": 2.5,
-        "max_range_km": 15.0,
-        "latitude": 12.9165,
-        "longitude": 77.6011,
+        "drone_id": "DRN-010",
+        "model": "Volansi VOLY C20",
+        "battery_pct": 15.0,
+        "max_payload_kg": 9.0,
+        "max_range_km": 80.0,
+        "latitude": 12.9780,
+        "longitude": 77.5990,
         "status": "MAINTENANCE",
-        "zone": "Banashankari",
+        "zone": "Central Bengaluru",
     },
 ]
 
 
 async def seed() -> None:
-    client = motor.motor_asyncio.AsyncIOMotorClient(MONGODB_URI)
-    db = client[MONGODB_DATABASE]
+    print(f"Using database: {settings.MONGODB_DATABASE}")
+    client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URI)
+    db = client[settings.MONGODB_DATABASE]
     col = db["drones"]
 
     now = datetime.now(UTC)

@@ -86,6 +86,7 @@ async def run_migration(apply: bool, allow_admin: list[str]) -> None:
 
 
 def main():
+    print(f"Using database: {settings.MONGODB_DATABASE}")
     parser = argparse.ArgumentParser(description="Migrate legacy user roles to standard roles.")
     parser.add_argument(
         "--apply",

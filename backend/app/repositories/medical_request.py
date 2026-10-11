@@ -31,11 +31,13 @@ class MedicalRequestRepository:
     # ── Read ──────────────────────────────────────────────────────────────────
 
     async def get_by_id(self, request_id: str) -> Optional[dict]:
+        doc = None
         try:
-            oid = ObjectId(request_id)
+            doc = await self._col.find_one({"_id": ObjectId(request_id)})
         except Exception:
-            return None
-        doc = await self._col.find_one({"_id": oid})
+            pass
+        if not doc:
+            doc = await self._col.find_one({"request_id": request_id})
         return _doc_to_dict(doc) if doc else None
 
     async def list_requests(
@@ -89,8 +91,11 @@ class MedicalRequestRepository:
         priority_tier: Optional[str] = None,
         priority_score: Optional[float] = None,
         assigned_drone_id: Optional[str] = None,
+        failure_reason: Optional[str] = None,
+        status_note: Optional[str] = None,
+        dispatch_summary: Optional[dict] = None,
     ) -> bool:
-        """Update request status, mission_id, priority metadata, and assigned drone."""
+        """Update request status, mission_id, priority metadata, assigned drone, status note, dispatch summary, and failure reason."""
         query = {}
         try:
             query = {"_id": ObjectId(request_id)}
@@ -106,12 +111,33 @@ class MedicalRequestRepository:
             update_doc["priority_score"] = priority_score
         if assigned_drone_id is not None:
             update_doc["assigned_drone_id"] = assigned_drone_id
+        if failure_reason is not None:
+            update_doc["failure_reason"] = failure_reason
+        if status_note is not None:
+            update_doc["status_note"] = status_note
+        if dispatch_summary is not None:
+            update_doc["dispatch_summary"] = dispatch_summary
 
         result = await self._col.update_one(query, {"$set": update_doc})
         if result.matched_count > 0:
             log.info("medical_request_status_updated", request_id=request_id, status=new_status)
             return True
         return False
+
+    async def update_dispatch_summary(
+        self,
+        request_id: str,
+        dispatch_summary: dict,
+    ) -> bool:
+        """Update only the dispatch summary of a medical request."""
+        query = {}
+        try:
+            query = {"_id": ObjectId(request_id)}
+        except Exception:
+            query = {"request_id": request_id}
+
+        result = await self._col.update_one(query, {"$set": {"dispatch_summary": dispatch_summary}})
+        return result.matched_count > 0
 
     # ── Indexes ───────────────────────────────────────────────────────────────
 

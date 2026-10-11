@@ -105,3 +105,32 @@
   .hud-rail { position: fixed; width: 100%; left: 0; right: 0; bottom: 0; top: auto; max-height: 50vh; flex-direction: row; overflow-x: auto; border-top: 1px solid var(--separator-color); background: var(--bg-surface); padding: var(--space-4); gap: var(--space-4); z-index: 100; border-radius: var(--radius-xl) var(--radius-xl) 0 0; box-shadow: 0 -4px 16px rgba(0,0,0,0.1); }
   .hud-panel { min-width: 300px; flex-shrink: 0; border: none; box-shadow: none; }
 }
+
+/* ── Operator Console Specific Utilities ────────────────────────────── */
+@keyframes flow { to { stroke-dashoffset: -48px; } }
+@keyframes ring { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(2.6); opacity: 0; } }
+@keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.4); } }
+
+.flow { animation: flow 1.4s linear infinite; }
+.ring { animation: ring 2.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+.beat { animation: beat 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flow, .ring, .beat { animation: none; }
+}
+
+@media (max-width: 1100px) {
+  .trail { display: none !important; }
+}
+
+@media (max-width: 760px) {
+  .sheet {
+    top: auto !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    width: auto !important;
+    max-height: 60vh !important;
+  }
+  .hud { display: none !important; }
+}

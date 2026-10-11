@@ -32,6 +32,7 @@ class RequestStatus(str, Enum):
     in_transit = "IN_TRANSIT"
     delivered = "DELIVERED"
     cancelled = "CANCELLED"
+    failed = "FAILED"
 
 
 class MedicalType(str, Enum):
@@ -83,6 +84,8 @@ class MedicalRequestResponse(BaseModel):
     priority_tier: Optional[str] = None
     priority_score: Optional[float] = None
     assigned_drone_id: Optional[str] = None
+    status_note: Optional[str] = None
+    dispatch_summary: Optional[dict] = None
     created_at: datetime
 
     model_config = {"from_attributes": True}

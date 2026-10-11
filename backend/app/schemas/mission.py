@@ -19,11 +19,25 @@ class MissionStatus(str, Enum):
     approaching_destination = "APPROACHING_DESTINATION"
     delivered = "DELIVERED"
     failed = "FAILED"
+    cancelled = "CANCELLED"
+
+
+TERMINAL_MISSION_STATUSES = (
+    MissionStatus.delivered.value,
+    MissionStatus.failed.value,
+    MissionStatus.cancelled.value,
+)
 
 
 class RoutePoint(BaseModel):
     lat: float
     lng: float
+
+
+class WeatherNote(BaseModel):
+    condition: str
+    probability: Optional[float] = None
+    note: str
 
 
 class MissionResponse(BaseModel):
@@ -38,5 +52,6 @@ class MissionResponse(BaseModel):
     status: MissionStatus
     started_at: datetime
     failure_reason: Optional[str] = None
+    weather: Optional[WeatherNote] = None
 
     model_config = {"from_attributes": True}

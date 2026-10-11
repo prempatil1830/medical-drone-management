@@ -191,10 +191,12 @@ class PriorityAgent:
 
         # ── Extract input fields ──────────────────────────────────────────────
         try:
-            urgency: str = str(request.get("urgency", "")).upper()
-            medical_type: str = str(request.get("medical_type", ""))
+            urg_raw = request.get("urgency", "")
+            urgency: str = (urg_raw.value if hasattr(urg_raw, "value") else str(urg_raw)).upper()
+            med_raw = request.get("medical_type", "")
+            medical_type: str = med_raw.value if hasattr(med_raw, "value") else str(med_raw)
             created_at: datetime = request.get("created_at", now)
-            request_id: str = str(request.get("request_id", request.get("id", "")))
+            request_id: str = str(request.get("id") or request.get("request_id") or "")
         except Exception as exc:
             reason = f"Input extraction failed: {exc}"
             log.error("priority_agent_input_error", error=str(exc))
